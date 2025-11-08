@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String    @unique
+  passwordHash  String
+  avatar        String?
+  role          Role      @default(MEMBER)
+  reputation    Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastSeen      DateTime  @default(now())
+  
+  posts         Post[]
+  threads       Thread[]
+  sessions      Session[]
+  
+  @@index([email])
+  @@index([username])
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  slug        String    @unique
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  threads     Thread[]
+  
+  @@index([slug])
+}
+
+model Thread {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  isLocked    Boolean   @default(false)
+  isPinned    Boolean   @default(false)
+  views       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastPostAt  DateTime  @default(now())
+  
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  posts       Post[]
+  
+  @@index([categoryId])
+  @@index([slug])
+  @@index([lastPostAt])
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  content     String
+  isEdited    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  threadId    String
+  thread      Thread    @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  
+  @@index([threadId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires      DateTime
+  
+  @@index([sessionToken])
+  @@index([userId])
+}
+
+enum Role {
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+

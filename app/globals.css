@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --space-dark: #0a0e27;
+  --space-darker: #050811;
+  --space-light: #1a1f3a;
+  --space-accent: #00d4ff;
+  --space-accent-dark: #0099cc;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background: var(--space-darker);
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: linear-gradient(135deg, #050811 0%, #0a0e27 50%, #1a1f3a 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--space-accent);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--space-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--space-light);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--space-accent-dark);
+}
+
+/* Glow effects */
+.glow-text {
+  text-shadow: 0 0 10px var(--space-accent), 0 0 20px var(--space-accent);
+}
+
+.glow-border {
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Selection */
+::selection {
+  background: var(--space-accent);
+  color: var(--space-darker);
+}
+
